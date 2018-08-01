@@ -9,11 +9,12 @@
     }
     // Store library if more than one argument
     if (arguments.length > 1) {
+      var dependenciesIsArray = Array.isArray(dependencies);
       // Handle when the second argument is a function instead of an array
-      if(!Array.isArray(dependencies) && typeof dependencies == "function") {
+      if(!dependenciesIsArray && typeof dependencies == "function") {
         callback = depenencies;
         dependencies = []; 
-      } else if (!Array.isArray(dependencies)){
+      } else if (!dependenciesIsArray){
         // Throw exception if the second argument isn't an array or a function
         throw new TypeError ('Second argument must be a string array.')
       }
