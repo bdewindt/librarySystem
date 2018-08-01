@@ -1,0 +1,58 @@
+<script src="./lib/simpletest.js"></script>
+<script src="./librarySystem.js"></script>
+<script>
+
+tests({
+  'A simple callback': function() { 
+    librarySystem('test', [], function(){
+      return true;
+    })
+
+    eq(librarySystem('test'), true);
+  },
+  'Library with a dependency': function() {
+    librarySystem('dependency', [], function() {
+      return 'loaded dependency';
+    });
+
+    librarySystem('app', ['dependency'], function(dependency) {
+      return 'app with ' + dependency;
+    });
+
+    eq(librarySystem('app'), 'app with loaded dependency'); // 'app with loaded dependency'
+  },
+  'A dependency with dependencies': function() {
+    librarySystem('getTrue', ['returnTrue'], function(returnTrue) {
+      return returnTrue;
+    });
+
+    librarySystem('returnTrue', [], function() {
+      return true;
+    });
+    
+    eq(librarySystem('getTrue'), true)
+  },
+  'An exception is thrown if the second argument is not an ': function() {
+    var isReferenceError = false;
+
+    try {
+      librarySystem('doesNotExist');      
+    } catch (error) {
+        isReferenceError = error instanceof ReferenceError;
+    }
+    eq(isReferenceError, true);
+  },
+  'An exception is thrown if the library does not exist': function() {
+    var isReferenceError = false;
+
+    try {
+      librarySystem('doesNotExist');      
+    } catch (error) {
+        isReferenceError = error instanceof ReferenceError;
+    }
+    eq(isReferenceError, true);
+  }
+});
+    
+</script>
+  
